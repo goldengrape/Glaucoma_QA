@@ -19,10 +19,10 @@ if "index" not in st.session_state:
     if api_key is not None:
         # 如果index.json不存在，就创建一个
         with st.spinner("正在创建索引，请稍候..."):
-        if not os.path.exists("index.json"):
-            st.session_state.index=construct_index("./reference/")
-        else:
-            st.session_state.index = GPTSimpleVectorIndex.load_from_disk('index.json')
+            if not os.path.exists("index.json"):
+                st.session_state.index=construct_index("./reference/")
+            else:
+                st.session_state.index = GPTSimpleVectorIndex.load_from_disk('index.json')
 
 
 if ask_button and (st.session_state.index is not None):
