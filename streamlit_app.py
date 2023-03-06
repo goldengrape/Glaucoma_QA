@@ -3,6 +3,7 @@ from gpt_index import SimpleDirectoryReader, GPTListIndex, readers, GPTSimpleVec
 from langchain import OpenAI
 import sys
 import os
+from ingest_data import construct_index
 
 st.title("青光眼AI辅助咨询")
 st.write("本系统基于ChatGPT，仅供参考，不作为医疗诊断依据。")
@@ -16,7 +17,12 @@ answer=st.markdown("")
 
 if "index" not in st.session_state:
     if api_key is not None:
-        st.session_state.index = GPTSimpleVectorIndex.load_from_disk('index.json')
+        # 如果index.json不存在，就创建一个
+        with st.spinner("正在创建索引，请稍候..."):
+        if not os.path.exists("index.json"):
+            st.session_state.index=construct_index("./reference/")
+        else:
+            st.session_state.index = GPTSimpleVectorIndex.load_from_disk('index.json')
 
 
 if ask_button and (st.session_state.index is not None):
